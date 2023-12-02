@@ -2,21 +2,18 @@ use crate::Problem;
 
 pub struct DayTwo;
 
+#[derive(Default, Debug)]
 struct Cubes {
     red: u32,
     green: u32,
     blue: u32,
 }
 
-// impl Cubes {
-//     fn new(red: u32, green: u32, blue: u32) -> Self {
-//         return Cubes { red, green, blue };
-//     }
-
-//     fn is_in(&self, other: Cubes) -> bool {
-//         return self.red <= other.red && self.green <= other.green && self.blue <= other.blue;
-//     }
-// }
+impl Cubes {
+    fn power(&self) -> u32 {
+        return self.red * self.green * self.blue;
+    }
+}
 
 impl Problem for DayTwo {
     fn part_one(&self, input: &str) -> String {
@@ -30,45 +27,33 @@ impl Problem for DayTwo {
         let mut result = 0;
 
         for line in lines {
-            println!("----------------Loop-----------------");
             let parts = line.trim().split(':').collect::<Vec<_>>();
             let id = parts[0].split(' ').collect::<Vec<_>>()[1]
                 .parse::<u64>()
                 .unwrap();
             let rounds = parts[1].trim().split(';').collect::<Vec<_>>();
 
-            println!("id: {}", id);
-            println!("rounds: {:?}", rounds);
             let mut possible = true;
 
             for round in rounds {
-                println!("round: {}", round);
-
                 let vals = round.trim().split(',').collect::<Vec<_>>();
-
-                println!("Vals: {:?}", vals);
 
                 for val in vals {
                     let t = val.trim().split(' ').collect::<Vec<_>>();
-                    println!("t: {:?}", t);
 
                     if t[1].starts_with("red") {
-                        println!("matched red, val0: {}", t[0]);
                         if t[0].parse::<u32>().unwrap() > game_config.red {
                             possible = false;
                             break;
                         }
                     }
                     if t[1].starts_with("green") {
-                        println!("matched green, val0: {}", t[0]);
                         if t[0].parse::<u32>().unwrap() > game_config.green {
                             possible = false;
                             break;
                         }
                     }
                     if t[1].starts_with("blue") {
-                        println!("matched blue, val0: {}", t[0]);
-
                         if t[0].parse::<u32>().unwrap() > game_config.blue {
                             possible = false;
                             break;
@@ -77,7 +62,6 @@ impl Problem for DayTwo {
                 }
             }
 
-            println!("Possible: {}", possible);
             if possible {
                 result += id
             }
@@ -85,8 +69,45 @@ impl Problem for DayTwo {
 
         result.to_string()
     }
-    fn part_two(&self, _input: &str) -> String {
-        "This is just a template part two".to_string()
+
+    fn part_two(&self, input: &str) -> String {
+        let lines = input.lines().collect::<Vec<_>>();
+        let mut result = 0;
+
+        for line in lines {
+            let mut cube_counter = Cubes::default();
+
+            let parts = line.trim().split(':').collect::<Vec<_>>();
+            let rounds = parts[1].trim().split(';').collect::<Vec<_>>();
+
+            for round in rounds {
+                let vals = round.trim().split(',').collect::<Vec<_>>();
+
+                for val in vals {
+                    let t = val.trim().split(' ').collect::<Vec<_>>();
+
+                    if t[1].starts_with("red") {
+                        if t[0].parse::<u32>().unwrap() > cube_counter.red {
+                            cube_counter.red = t[0].parse::<u32>().unwrap();
+                        }
+                    }
+                    if t[1].starts_with("green") {
+                        if t[0].parse::<u32>().unwrap() > cube_counter.green {
+                            cube_counter.green = t[0].parse::<u32>().unwrap();
+                        }
+                    }
+                    if t[1].starts_with("blue") {
+                        if t[0].parse::<u32>().unwrap() > cube_counter.blue {
+                            cube_counter.blue = t[0].parse::<u32>().unwrap();
+                        }
+                    }
+                }
+            }
+
+            result += cube_counter.power()
+        }
+
+        result.to_string()
     }
 }
 
@@ -114,6 +135,6 @@ mod tests {
         Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green";
 
         let day = DayTwo {};
-        assert_eq!(day.part_two(input), "2541");
+        assert_eq!(day.part_two(input), "2286");
     }
 }
