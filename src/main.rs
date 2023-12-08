@@ -3,6 +3,7 @@ use adventofcode_2023::puzzle_solutions::day_2::DayTwo;
 use adventofcode_2023::puzzle_solutions::day_4::DayFour;
 use adventofcode_2023::puzzle_solutions::day_6::DaySix;
 use adventofcode_2023::puzzle_solutions::day_7::DaySeven;
+use adventofcode_2023::puzzle_solutions::day_8::DayEight;
 use adventofcode_2023::puzzle_solutions::day_template::DayTemplate;
 use adventofcode_2023::Problem;
 
@@ -28,6 +29,7 @@ fn select_day(day: usize) -> Option<Box<dyn Problem>> {
         4 => Some(Box::new(DayFour {})),
         6 => Some(Box::new(DaySix {})),
         7 => Some(Box::new(DaySeven {})),
+        8 => Some(Box::new(DayEight {})),
         _ => Some(Box::new(DayTemplate {})),
     }
 }
