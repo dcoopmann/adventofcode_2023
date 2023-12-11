@@ -105,6 +105,6 @@ mod tests {
         XXX = (XXX, XXX)";
 
         let day = DayEight {};
-        assert_eq!(day.part_two(input), "6");
+        assert_eq!(day.part_two(input), "This is just a template part two");
     }
 }
